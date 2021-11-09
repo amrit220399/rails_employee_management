@@ -1,6 +1,6 @@
 class EmployeesController < ApplicationController
   before_action :set_employee, only: %i[ show edit update destroy ]
-
+  before_action :authenticate_user!, except: [:show, :index ]
   # GET /employees or /employees.json
   def index
     @employees = Employee.all
@@ -22,7 +22,7 @@ class EmployeesController < ApplicationController
   # POST /employees or /employees.json
   def create
     @employee = Employee.new(employee_params)
-
+    @employee.user = current_user
     respond_to do |format|
       if @employee.save
         format.html { redirect_to @employee, notice: "Employee was successfully created." }
